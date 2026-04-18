@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+<meta charset="UTF-8">
+<title>💖 ئێمە 💖</title>
+
+<style>
+body{
+  font-family: sans-serif;
+  text-align:center;
+  background: linear-gradient(to right,#ff758c,#ff7eb3);
+  color:white;
+}
+
+.box{
+  background: rgba(255,255,255,0.2);
+  margin:15px;
+  padding:15px;
+  border-radius:20px;
+}
+
+input,textarea{
+  width:80%;
+  padding:10px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+}
+
+button{
+  padding:10px;
+  border:none;
+  border-radius:15px;
+  background:#ff4d6d;
+  color:white;
+}
+
+img{
+  width:150px;
+  border-radius:15px;
+  margin:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>❤️ تەنها بۆ ئێمە 💑</h2>
+
+<div id="login" class="box">
+<input id="email" placeholder="ئیمەیڵ"><br>
+<input id="pass" type="password" placeholder="وشەی نهێنی"><br>
+<button onclick="login()">چوونەژوور</button>
+</div>
+
+<div id="app" style="display:none">
+
+<h2 id="timer"></h2>
+
+<div class="box">
+<h3 id="quote"></h3>
+</div>
+
+<!-- یادگاری -->
+<div class="box">
+<textarea id="text" placeholder="یادگاری..."></textarea><br>
+<input type="file" id="img"><br>
+<button onclick="save()">💾 پاشەکەوت</button>
+</div>
+
+<div id="memories"></div>
+
+<!-- چات -->
+<div class="box">
+<h3>💬 چات</h3>
+<input id="chatInput" placeholder="نامە بنووسە...">
+<button onclick="send()">ناردن</button>
+<div id="chat"></div>
+</div>
+
+<!-- گۆرانی -->
+<audio controls autoplay loop>
+<source src="https://www.w3schools.com/html/horse.mp3">
+</audio>
+
+</div>
+
+<script>
+
+// تەنها 2 ئەکاونت
+const users=[
+{email:"you@gmail.com",pass:"1234"},
+{email:"love@gmail.com",pass:"5678"}
+];
+
+function login(){
+let u=users.find(x=>x.email==email.value && x.pass==pass.value);
+if(u){
+login.style.display="none";
+app.style.display="block";
+load();
+}else alert("❌ هەڵەیە");
+}
+
+// وتەی ڕۆژانە
+const quotes=[
+"تۆ ژیانمی 💖",
+"بێ تۆ هیچم نییە 🌹",
+"هەموو دڵم بۆ تۆیە ❤️",
+"لەگەڵت بەهەشتە 💑",
+"هەرگیز لە بیرم ناچیت 😊"
+];
+
+quote.innerText=quotes[new Date().getDate()%quotes.length];
+
+// ژماردنی ڕۆژ
+let start=new Date("2024-01-01"); // گۆڕە بۆ ڕۆژی خۆتان
+let now=new Date();
+let days=Math.floor((now-start)/(1000*60*60*24));
+timer.innerText="💞 "+days+" ڕۆژە لەگەڵ یەکین";
+
+// یادگاری + وێنە
+function save(){
+let mem=localStorage.getItem("mem")||"";
+
+let file=img.files[0];
+if(file){
+let reader=new FileReader();
+reader.onload=function(){
+mem+="<p>💌 "+text.value+"</p><img src='"+reader.result+"'>";
+localStorage.setItem("mem",mem);
+load();
+}
+reader.readAsDataURL(file);
+}else{
+mem+="<p>💌 "+text.value+"</p>";
+localStorage.setItem("mem",mem);
+load();
+}
+
+text.value="";
+}
+
+// load
+function load(){
+memories.innerHTML=localStorage.getItem("mem")||"";
+chat.innerHTML=localStorage.getItem("chat")||"";
+}
+
+// چات
+function send(){
+let c=localStorage.getItem("chat")||"";
+c+="<p>💬 "+chatInput.value+"</p>";
+localStorage.setItem("chat",c);
+chatInput.value="";
+load();
+}
+
+</script>
+
+</body>
+</html>
